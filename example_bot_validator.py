@@ -7,34 +7,50 @@ from openai import OpenAI
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY") or "your_api_key")
 
-def ask_bot(question: str) -> str:
+# def ask_bot(question: str) -> str:
+#     """
+#     Sends a question to the RAG chatbot API and retrieves the answer.
+
+#     Args:
+#         question (str): The user's question.
+
+#     Returns:
+#         str: The answer from the chatbot or an error message if the request fails.
+#     """
+#     url = "https://dev.agentkovac.sk/api/rag/get_rag_answer"
+#     payload = [{"role": "user", "content": question}]
+#     headers = {"Content-Type": "application/json"}
+
+#     try:
+#         response = requests.post(
+#             url,
+#             json=payload,
+#             headers=headers,
+#             timeout=60
+#         )
+#         response.raise_for_status()
+#         data = response.json()["answer"]
+#         return data
+#     except requests.exceptions.RequestException as e:
+#         return "error: " + str(e)
+#     except (ValueError, KeyError) as e:
+#         return "error: invalid response format - " + str(e)
+
+def ask_bot(question: str):
     """
-    Sends a question to the RAG chatbot API and retrieves the answer.
+    Sends a question to the chatbot API and retrieves the answer.
 
     Args:
         question (str): The user's question.
 
     Returns:
-        str: The answer from the chatbot or an error message if the request fails.
+        str: The answer from the chatbot.
     """
-    url = "https://dev.agentkovac.sk/api/rag/get_rag_answer"
-    payload = [{"role": "user", "content": question}]
-    headers = {"Content-Type": "application/json"}
-
-    try:
-        response = requests.post(
-            url,
-            json=payload,
-            headers=headers,
-            timeout=60
-        )
-        response.raise_for_status()
-        data = response.json()["answer"]
-        return data
-    except requests.exceptions.RequestException as e:
-        return "error: " + str(e)
-    except (ValueError, KeyError) as e:
-        return "error: invalid response format - " + str(e)
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[{"role": "user", "content": question}]
+    )
+    return response.choices[0].message.content.strip()
 
 def ask_openai(question: str):
     """
