@@ -38,6 +38,8 @@ client = OpenAI(api_key=os.getenv("OPENAI_API_KEY") or "your_api_key")
 
 def ask_bot(question: str):
     """
+    !!!TEMPORARY FUNCTION; THE MAIN FUNCTION IS COMMENTED OUT!!!
+
     Sends a question to the chatbot API and retrieves the answer.
 
     Args:

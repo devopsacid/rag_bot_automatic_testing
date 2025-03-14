@@ -82,20 +82,44 @@ Tento dokument podrobne opisuje postup testovania projektu, ktorý zahŕňa manu
 
 ---
 
-## --------------DODATOČNÉ INFORMÁCIE----------------
+## -------------- PRE AUTOMATICKÝCH TESTEROV ------------------
 
-- **Používame Python 3.10.**
+Na svoju prácu budete potrebovať základné znalosti GIT-u. Stiahnite si ho do svojho počítača, ak ho ešte nemáte: [https://git-scm.com/downloads](https://git-scm.com/downloads)
 
-- **Backlog (zoznam všetkých issue):**  
-  [https://github.com/users/OlegQm/projects/3/views/1](https://github.com/users/OlegQm/projects/3/views/1)
+Musíte sa naučiť (a pochopiť, prečo je to dôležité):
 
-- **Prístup pre manuálne testovanie:**  
-  Pre vykonanie manuálneho testovania je potrebný účet pre prístup na stránku [https://prod.agentkovac.sk/](https://prod.agentkovac.sk/).
+1. Ako vytvárať vetvy lokálne;
+2. Ako do nich pridávať svoje zmeny;
+3. Ako tieto vetvy pridať na Github a synchronizovať ich s lokálnymi;
+4. Ako vytvárať PR (Pull Requests).
 
-- **Nastavenie automatického testovania:**  
+Stiahnite si [projekt](https://github.com/OlegQm/rag_bot_automatic_testing) a [Python 3.10](https://www.python.org/downloads/release/python-31016/)** lokálne, vytvorte si novú vetvu (z vetvy master) a pridajte do nej akékoľvek zmeny. Potom sa uistite, že vaše vetvy s lokálnymi zmenami sú prítomné aj na GitHube v našom repozitári. Následne vytvorte PR z vašej vetvy do **master**.
+
+Vo **master** sa bude zhromažďovať naša spoločná práca. **PR** sú potrebné na to, aby sa "váš príspevok dostal do spoločnej základne" a aby si ostatní účastníci mohli pozrieť, čo ste zmenili.
+
+- **Nastavenie OpenAI API:**
   - Zaregistrujte sa na [https://openai.com/](https://openai.com/).
   - Vytvorte OpenAI API kľúč na [https://platform.openai.com/api-keys](https://platform.openai.com/api-keys).
   - Nabite účet OpenAI na **5 dolárov** (podrobnosti: [OpenAI Billing Overview](https://platform.openai.com/settings/organization/billing/overview)), aby kľúč fungoval správne.
 
 - **Šetrenie OpenAI tokenov:**  
   Pri automatickom testovaní je potrebné šetriť OpenAI tokeny (tých 5 dolárov). Preto najprv spustite testy, ktoré tokeny nevyžadujú, a ak prebehnú úspešne, spustite testy, ktoré ich vyžadujú (využite závislosti v pytest).
+
+---
+
+## -------------- PRE MANULANÝCH TESTEROV ------------------
+
+- **Prístup pre manuálne testovanie:**
+  Pre vykonanie manuálneho testovania je potrebný účet pre prístup na stránku [https://prod.agentkovac.sk/](https://prod.agentkovac.sk/).
+
+- **Discord:**
+  Môžete testovať aj na Discorde v našom kanáli botov @AgentKovac (stabilná verzia bota) a @DEVAgentKovac (verzia bota s novými funkciami).
+
+---
+
+## --------------DODATOČNÉ INFORMÁCIE----------------
+
+- **Používame [Python 3.10](https://www.python.org/downloads/release/python-31016/)**
+
+- **Backlog (zoznam všetkých issue):**
+  [https://github.com/users/OlegQm/projects/3/views/1](https://github.com/users/OlegQm/projects/3/views/1)
