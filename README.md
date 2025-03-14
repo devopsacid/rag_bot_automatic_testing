@@ -93,7 +93,7 @@ Musíte sa naučiť (a pochopiť, prečo je to dôležité):
 3. Ako tieto vetvy pridať na Github a synchronizovať ich s lokálnymi;
 4. Ako vytvárať PR (Pull Requests).
 
-Stiahnite si [projekt](https://github.com/OlegQm/rag_bot_automatic_testing) a [Python 3.10](https://www.python.org/downloads/release/python-31016/)** lokálne, vytvorte si novú vetvu (z vetvy master) a pridajte do nej akékoľvek zmeny. Potom sa uistite, že vaše vetvy s lokálnymi zmenami sú prítomné aj na GitHube v našom repozitári. Následne vytvorte PR z vašej vetvy do **master**.
+Stiahnite si [projekt](https://github.com/OlegQm/rag_bot_automatic_testing) a [Python 3.10](https://www.python.org/downloads/release/python-31016/) lokálne, vytvorte si novú vetvu (z vetvy master) a pridajte do nej akékoľvek zmeny. Potom sa uistite, že vaše vetvy s lokálnymi zmenami sú prítomné aj na GitHube v našom repozitári. Následne vytvorte PR z vašej vetvy do **master**.
 
 Vo **master** sa bude zhromažďovať naša spoločná práca. **PR** sú potrebné na to, aby sa "váš príspevok dostal do spoločnej základne" a aby si ostatní účastníci mohli pozrieť, čo ste zmenili.
 
