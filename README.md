@@ -84,6 +84,8 @@ Tento dokument podrobne opisuje postup testovania projektu, ktorý zahŕňa manu
 
 ## --------------DODATOČNÉ INFORMÁCIE----------------
 
+- **Používame Python 3.10.**
+
 - **Backlog (zoznam všetkých issue):**  
   [https://github.com/users/OlegQm/projects/3/views/1](https://github.com/users/OlegQm/projects/3/views/1)
 
