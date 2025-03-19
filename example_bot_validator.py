@@ -25,7 +25,6 @@ async def ask_bot(question: str) -> str:
     # TODO !! Please define PROD_PASSWORD in your local .env
     USERNAME = "tester"
     PASSWORD = os.getenv("PROD_PASSWORD")
-    print(PASSWORD)
     
     auth = BasicAuth(USERNAME, PASSWORD)
 
@@ -92,9 +91,10 @@ def load_questions(file_path: str):
         pytest.fail(f"Error parsing JSON in file {file_path}.")
         return []
 
+@pytest.mark.asyncio
 @pytest.mark.dependency(name="test_bot_response_format")
 @pytest.mark.parametrize("question", ["Kto je dekan?"])
-def test_bot_response_format(question):
+async def test_bot_response_format(question):
     """
     Tests whether the ask_bot function returns
         a properly formatted string without errors.
@@ -102,16 +102,17 @@ def test_bot_response_format(question):
     Args:
         question (str): A test question for the bot.
     """
-    response = ask_bot(question)
+    response = await ask_bot(question)
     assert isinstance(response, str)
     assert not response.lower().startswith("error")
 
+@pytest.mark.asyncio
 @pytest.mark.dependency(
     name="test_contains_key_data",
     depends=["test_bot_response_format"]
 )
 @pytest.mark.parametrize("file_path", ["simple_questions.json"])
-def test_contains_key_data(file_path):
+async def test_contains_key_data(file_path):
     """
     Checks if answers from ask_bot contain correct answers
         from predefined question-answer pairs.
@@ -124,14 +125,15 @@ def test_contains_key_data(file_path):
 
     for row in data:
         question, correct_answer = list(row.items())[0]
-        answer = ask_bot(question).lower()
+        answer = (await ask_bot(question)).lower()
         correct_counter += 1 if correct_answer.lower() in answer else 0
 
     assert correct_counter >= len(data) * (2 / 3)
 
+@pytest.mark.asyncio
 @pytest.mark.dependency(depends=["test_bot_response_format"])
 @pytest.mark.parametrize("question", ["Kto je dekan?"])
-def test_bot_response_time(question):
+async def test_bot_response_time(question):
     """
     Measures and validates that the bot's
         response time is within acceptable limits.
@@ -140,13 +142,14 @@ def test_bot_response_time(question):
         question (str): A test question to measure response time.
     """
     start_time = time.time()
-    ask_bot(question)
+    await ask_bot(question)
     duration = time.time() - start_time
     assert duration <= 20
 
+@pytest.mark.asyncio
 @pytest.mark.dependency(depends=["test_contains_key_data"])
 @pytest.mark.parametrize("file_path", ["simple_questions.json"])
-def test_answer_validity(file_path):
+async def test_answer_validity(file_path):
     """
     Validates correctness of the bot's answers
         by comparing them with OpenAI's GPT-4o-mini.
@@ -160,7 +163,7 @@ def test_answer_validity(file_path):
 
     for row in data:
         question, correct_answer = list(row.items())[0]
-        answer = ask_bot(question)
+        answer = await ask_bot(question)
         validation_request = (
             f"I asked my bot question '{question}', correct answer '{correct_answer}', "
             f"and got bot answer '{answer}'. Check if the correct answer is contained "
