@@ -4,55 +4,42 @@ import os
 import pytest
 import requests
 from openai import OpenAI
+from httpx import BasicAuth, AsyncClient, Timeout
+
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY") or "your_api_key")
 
-# def ask_bot(question: str) -> str:
-#     """
-#     Sends a question to the RAG chatbot API and retrieves the answer.
-
-#     Args:
-#         question (str): The user's question.
-
-#     Returns:
-#         str: The answer from the chatbot or an error message if the request fails.
-#     """
-#     url = "https://dev.agentkovac.sk/api/rag/get_rag_answer"
-#     payload = [{"role": "user", "content": question}]
-#     headers = {"Content-Type": "application/json"}
-
-#     try:
-#         response = requests.post(
-#             url,
-#             json=payload,
-#             headers=headers,
-#             timeout=60
-#         )
-#         response.raise_for_status()
-#         data = response.json()["answer"]
-#         return data
-#     except requests.exceptions.RequestException as e:
-#         return "error: " + str(e)
-#     except (ValueError, KeyError) as e:
-#         return "error: invalid response format - " + str(e)
-
-def ask_bot(question: str):
+async def ask_bot(question: str) -> str:
     """
-    !!!TEMPORARY FUNCTION; THE MAIN FUNCTION IS COMMENTED OUT!!!
-
-    Sends a question to the chatbot API and retrieves the answer.
+    Sends a question to the RAG chatbot API and retrieves the answer.
 
     Args:
         question (str): The user's question.
 
     Returns:
-        str: The answer from the chatbot.
+        str: The answer from the chatbot or an error message if the request fails.
     """
-    response = client.chat.completions.create(
-        model="gpt-4o-mini",
-        messages=[{"role": "user", "content": question}]
-    )
-    return response.choices[0].message.content.strip()
+    BASE_URL = "https://prod.agentkovac.sk"
+    payload = [{"role": "user", "content": question}]
+
+    # TODO !! Please define PROD_PASSWORD in your local .env
+    USERNAME = "tester"
+    PASSWORD = os.getenv("PROD_PASSWORD")
+    print(PASSWORD)
+    
+    auth = BasicAuth(USERNAME, PASSWORD)
+
+    try:
+        async with AsyncClient(auth=auth, timeout=Timeout(60.0, connect=10.0)) as http_client:
+            response = await http_client.post(f"{BASE_URL}/llm/get_rag_answer", json=payload)
+        response.raise_for_status()
+        answer_text = response.json()["answer"]
+        return answer_text
+    except requests.exceptions.RequestException as e:
+        return "error: " + str(e)
+    except (ValueError, KeyError) as e:
+        return "error: invalid response format - " + str(e)
+
 
 def ask_openai(question: str):
     """
@@ -70,6 +57,7 @@ def ask_openai(question: str):
         messages=[{"role": "user", "content": question}]
     )
     return response.choices[0].message.content.strip()
+
 
 def load_questions(file_path: str):
     """
