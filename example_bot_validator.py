@@ -6,10 +6,9 @@ import requests
 from openai import OpenAI
 from httpx import BasicAuth, AsyncClient, Timeout
 
-
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY") or "your_api_key")
 
-async def ask_bot(question: str) -> str:
+async def ask_bot(question: str, role: str = "user") -> str:
     """
     Sends a question to the RAG chatbot API and retrieves the answer.
 
@@ -20,12 +19,12 @@ async def ask_bot(question: str) -> str:
         str: The answer from the chatbot or an error message if the request fails.
     """
     BASE_URL = "https://prod.agentkovac.sk"
-    payload = [{"role": "user", "content": question}]
+    payload = [{"role": role, "content": question}]
 
     # TODO !! Please define PROD_PASSWORD in your local .env
-    USERNAME = "tester"
+    USERNAME = "admin"
     PASSWORD = os.getenv("PROD_PASSWORD")
-    
+
     auth = BasicAuth(USERNAME, PASSWORD)
 
     try:
@@ -40,7 +39,7 @@ async def ask_bot(question: str) -> str:
         return "error: invalid response format - " + str(e)
 
 
-def ask_openai(question: str):
+def ask_openai(question: str, role: str = "system") -> str:
     """
     Sends a question directly to OpenAI's GPT-4o-mini model
         and returns its response.
@@ -53,7 +52,7 @@ def ask_openai(question: str):
     """
     response = client.chat.completions.create(
         model="gpt-4o-mini",
-        messages=[{"role": "user", "content": question}]
+        messages=[{"role": role, "content": question}]
     )
     return response.choices[0].message.content.strip()
 
@@ -91,6 +90,7 @@ def load_questions(file_path: str):
         pytest.fail(f"Error parsing JSON in file {file_path}.")
         return []
 
+
 @pytest.mark.asyncio
 @pytest.mark.dependency(name="test_bot_response_format")
 @pytest.mark.parametrize("question", ["Kto je dekan?"])
@@ -105,6 +105,7 @@ async def test_bot_response_format(question):
     response = await ask_bot(question)
     assert isinstance(response, str)
     assert not response.lower().startswith("error")
+
 
 @pytest.mark.asyncio
 @pytest.mark.dependency(
@@ -130,6 +131,7 @@ async def test_contains_key_data(file_path):
 
     assert correct_counter >= len(data) * (2 / 3)
 
+
 @pytest.mark.asyncio
 @pytest.mark.dependency(depends=["test_bot_response_format"])
 @pytest.mark.parametrize("question", ["Kto je dekan?"])
@@ -145,6 +147,7 @@ async def test_bot_response_time(question):
     await ask_bot(question)
     duration = time.time() - start_time
     assert duration <= 20
+
 
 @pytest.mark.asyncio
 @pytest.mark.dependency(depends=["test_contains_key_data"])
